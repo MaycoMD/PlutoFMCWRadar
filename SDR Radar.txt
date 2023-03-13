@@ -1,0 +1,61 @@
+- GPR (Ground Penetrating Radar): -> Two UBX 160 USRP Daughterboards, 10MHz-6GHz, 160MHz BW, Full-Dúplex, Xilinx Kintex-7 FPGA
+				  -> Transmitting and receiving at the same frequency on the same board causes significant coupling between the TX and RX channels.  
+				     Therefore, separate daughterboards are usedfor TX and RX for each frequency in order to improve isolation
+				  -> Measures round-trip time-delay, Stepped Frequency radar implemented (8 tones) using off-the-shelf SDR hardware
+				  -> A wider band increases range resolution, and measuring frequencies closer together decreases range ambiguity
+				
+
+The  FMCW  radar  does  not  require  a  large  transmit power to obtain sufficient value of signal-to-noise ratio for target detection process, such as the
+radar pulses.
+
+
+Pulse radar sends short pulses and determines distance by measure time delay between transmitted and returned signal. FMCW radar constantly sends out linearly
+modulated signal and determines the distance based on the difference in transmitted and received frequency.
+Measuring very short amounts of time in electronics is tricky, which means that it is very hard/expensive to build pulse radar with good range resolution. FMCW
+radar can easily have range resolution of 0.5 meters, and cost below $500 in components.
+Pulse radar are blind on short distances - typically 50–100 meters in front of the radar is “blind spot”. FMCW radars do not have this problem. For long range target
+detection pulse radar is better, due to narrower bandwith and less noise.
+On the other hand, if the target is moving, the movement creates doppler shift in the frequency of the transmitted radar wave. For pulse radars this is an added 
+benefit, because the radar can also measure the relative target speed. In FMCW radar this is a problem, because the distance is measured by measuring the frequency 
+difference between transmitted and received radar wave, and any additional frequency shift caused by Doppler effect of the moving target “shifts” the measured 
+distance of the object. To overcome this, FMCW radars use several different modulation schemes (modulating with increasing frequency, then decreasing frequency, etc). 
+If not mitigated by algorithms, or having very fast frequency changes, this effect can cause the “ghost” targets to appear on FMCW radar.
+
+
+Las SDR presentan dos problemas para ser utilizadas como radar: 
+1) No poseen un único oscilador local compartido para los bloques TX y RX, por lo que existe una diferencia de fase y frecuencia entre ambos osciladores. Una posible
+solución es utilizar estampas de tiempo.
+2) A diferencia de los radares donde primero se mezclan las señales emitidas y recibidas, en las SDR se mezclan una vez digitalizadas, en la FPGA, o en la PC. Esto 
+hace que las cadenas de los bloques TX y RX inserten un delay en la señal, lo cual se traduce a rango en el diseño del radar. Una solución es medir y calibrar dicho 
+delay.
+
+ETTUS RESEARCH USRP E310:
+- LCD
+- 70MHz ~ 6GHz
+- Analog Devices AD9361
+- Xilinx Zynq 7020 (FPGA + ARM Cortex A9) 
+- Only GNU Radio
+
+ETTUS RESEARCH USRP B200:
+- 70MHz ~ 6GHz
+- Spartan6 XC6SLX75 FPGA
+- SuperSpeed USB 3.0 connectivity
+- Analog Devices AD9364
+- 1 Tx, 1 Rx, Half or Full Duplex
+- 12-bit ADC/DAC
+- NECESITA UN LNA EXTERNO?
+- Only GNU Radio
+
+ANALOG DEVICES ADALM-PLUTO:
+- LCD
+- Analog Devices AD9363
+- 325MHz ~ 3.8GHz
+- Full Duplex (para FMCW)
+- 12-bit ADC/DAC, 61.44MS/s
+- GNU Radio or MATLAB
+- USB 2.0 (MUY LENTO PARA ANALIZAR LOS DATOS EN LA PC)
+
+LIME MICROSYSTEMS LIMESDR:
+- Full Duplex (para FMCW)
+- 12-bit ADC/DAC
+- Only GNU Radio
